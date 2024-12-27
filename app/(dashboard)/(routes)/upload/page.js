@@ -31,16 +31,17 @@ const Upload = () => {
   };
 
   const saveInfo = async (file, fileUrl) => {
-    const docId = Date.now().toString();
+    const docId = generateRandomString().toString();
     await setDoc(doc(db, "UploadFile", docId), {
-      fileName: file.name,
-      fileSize: file.size,
-      fileType: file.type,
+      fileName: file?.name,
+      fileSize: file?.size,
+      fileType: file?.type,
       fileUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${fileUrl}`,
-      userEmail: user.primaryEmailAddress.emailAddress,
-      userName: user.fullName,
+      userEmail: user?.primaryEmailAddress.emailAddress,
+      userName: user?.fullName,
       password: '',
-      shortUrl: process.env.NEXT_PUBLIC_BASE_URL + generateRandomString(),
+      id: docId,
+      shortUrl: process.env.NEXT_PUBLIC_BASE_URL + docId,
     });
   };
 
