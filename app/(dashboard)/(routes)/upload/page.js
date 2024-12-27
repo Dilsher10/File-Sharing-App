@@ -1,21 +1,25 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import UploadForm from './_components/UploadForm';
 import { setDoc, doc, getFirestore } from 'firebase/firestore';
 import { useUser } from '@clerk/nextjs';
 import { generateRandomString } from '@/app/_utils/GenerateRandomString';
 import { app } from '@/firebaseConfig';
+import { useRouter } from 'next/navigation';
 
-const db = getFirestore(app);
 
 const Upload = () => {
   const { user } = useUser();
+  const router = useRouter();
+  const db = getFirestore(app);
+  const [fileDocId, setFileDocId] = useState();
+
   const uploadFile = async (file) => {
     if (!file) {
       alert("Please upload a file!");
     } else {
       const data = new FormData();
-      data.set('file', file);
+      data.set("file", file);
       let result = await fetch("/api/upload", {
         method: "POST",
         body: data,
@@ -23,7 +27,8 @@ const Upload = () => {
       result = await result.json();
       if (result.success) {
         alert("File uploaded successfully");
-        saveInfo(file, result.fileUrl);
+        const docId = await saveInfo(file, result.fileUrl); // Ensure docId is returned
+        router.push(`/file-preview/${docId}`);
       } else {
         alert("File upload failed");
       }
@@ -39,11 +44,14 @@ const Upload = () => {
       fileUrl: `${process.env.NEXT_PUBLIC_BASE_URL}${fileUrl}`,
       userEmail: user?.primaryEmailAddress.emailAddress,
       userName: user?.fullName,
-      password: '',
+      password: "",
       id: docId,
       shortUrl: process.env.NEXT_PUBLIC_BASE_URL + docId,
     });
+    setFileDocId(docId); // Update the state
+    return docId; // Return the docId for immediate use
   };
+
 
   return (
     <div className='p-5 px-8 md:px:28'>
