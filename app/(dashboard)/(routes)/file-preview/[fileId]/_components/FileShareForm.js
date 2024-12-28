@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Copy } from 'lucide-react';
+import GlobalApi from '@/app/_utils/GlobalApi';
+import { useUser } from '@clerk/nextjs';
 
 const FileShareForm = ({ file, onPasswordSave }) => {
 
     const [isPasswordEnable, setIsEnablePassword] = useState(false);
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const {user} = useUser();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(file.shortUrl).then(() => {
@@ -12,6 +16,20 @@ const FileShareForm = ({ file, onPasswordSave }) => {
         }).catch(() => {
             alert('Failed to copy URL');
         });
+    }
+
+    const sendEmail=()=>{
+        const data={
+            emailToSend: email,
+            userName: user?.fullName,
+            fileName: file.fileName,
+            fileSize: file.fileSize,
+            fileType: file.fileType,
+            shortUrl: file.shortUrl
+        }
+        GlobalApi.SendEmail(data).then(res=>{
+            console.log(res);
+        })
     }
 
     return file && (
@@ -55,9 +73,9 @@ const FileShareForm = ({ file, onPasswordSave }) => {
             <div className='border rounded-md p-3 mt-5'>
                 <label className='text-[14px] text-gray-500'>Send File to Email</label>
                 <div className='border rounded-md p-2 mt-1'>
-                    <input type="email" placeholder='example@gmail.com' className='bg-transparent outline-none'/>
+                    <input type="email" placeholder='example@gmail.com' className='bg-transparent outline-none' value={email} onChange={(e) => setEmail(e.target.value)}/>
                 </div>
-                <button className='p-2 disabled:bg-gray-300 bg-primary text-white hover:bg-blue-600 w-full mt-2 rounded-md'>Send Email</button>
+                <button className='p-2 disabled:bg-gray-300 bg-primary text-white hover:bg-blue-600 w-full mt-2 rounded-md' onClick={()=>sendEmail()}>Send Email</button>
             </div>
         </div>
     )
