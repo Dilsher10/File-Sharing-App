@@ -16,10 +16,7 @@ import {
   import * as React from 'react';
   
   export const EmailTemplate = ({
-    firstName,
-    formattedDate,
-    loginDevice,
-    loginLocation,
+    response,
   }) => (
     <Html>
       <Head />
@@ -39,36 +36,27 @@ import {
             <Row style={{ ...boxInfos, paddingBottom: "0" }}>
               <Column>
                 <Heading
-                  style={{
-                    fontSize: 32,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  Hi {firstName},
-                </Heading>
-                <Heading
                   as="h2"
                   style={{
                     fontSize: 26,
                     fontWeight: "bold",
-                    textAlign: "center",
+                    textAlign: "left",
                   }}
                 >
-                  Someone share file with you.
+                  Hi, {response?.userName} share file with you.
                 </Heading>
   
                 <Text style={paragraph}>
                   <b>File Name: </b>
-                  {formattedDate}
+                  {response.fileName}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>File Size: </b>
-                  {loginDevice}
+                  {response.fileSize}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
                   <b>File Type: </b>
-                  {loginLocation}
+                  {response.fileType}
                 </Text>
                 <Text
                   style={{
@@ -90,7 +78,7 @@ import {
             </Row>
             <Row style={{ ...boxInfos, paddingTop: "0" }}>
               <Column style={containerButton} colSpan={2}>
-                <Button style={button}>Click here to Download</Button>
+                <Button style={button} href={`${process.env.NEXT_PUBLIC_BASE_URL}download/${response?.id}`}>Click here to Download</Button>
               </Column>
             </Row>
           </Section>
@@ -111,8 +99,7 @@ import {
               color: "rgb(0,0,0, 0.7)",
             }}
           >
-            © 2022 | Yelp Inc., 350 Mission Street, San Francisco, CA 94105,
-            U.S.A. | www.yelp.com
+            © 2025 File Sharing App | All Rights Reserved
           </Text>
         </Container>
       </Body>

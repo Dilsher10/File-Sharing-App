@@ -25,7 +25,8 @@ const FileShareForm = ({ file, onPasswordSave }) => {
             fileName: file.fileName,
             fileSize: file.fileSize,
             fileType: file.fileType,
-            shortUrl: file.shortUrl
+            shortUrl: file.shortUrl,
+            id: file.id
         }
         GlobalApi.SendEmail(data).then(res=>{
             console.log(res);
@@ -73,7 +74,7 @@ const FileShareForm = ({ file, onPasswordSave }) => {
             <div className='border rounded-md p-3 mt-5'>
                 <label className='text-[14px] text-gray-500'>Send File to Email</label>
                 <div className='border rounded-md p-2 mt-1'>
-                    <input type="email" placeholder='example@gmail.com' className='bg-transparent outline-none' value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    <input type="email" placeholder='example@gmail.com' className='bg-transparent outline-none' required onChange={(e) => setEmail(e.target.value)}/>
                 </div>
                 <button className='p-2 disabled:bg-gray-300 bg-primary text-white hover:bg-blue-600 w-full mt-2 rounded-md' onClick={()=>sendEmail()}>Send Email</button>
             </div>
