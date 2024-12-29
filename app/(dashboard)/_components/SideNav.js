@@ -2,6 +2,7 @@
 import { File, Shield, Upload } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
+import Link from 'next/link'
 
 const SideNav = () => {
     const menuList = [
@@ -33,10 +34,10 @@ const SideNav = () => {
         </div>
         <div className='flex flex-col float-left w-full'>
         {menuList.map((item,index)=>(
-            <button key={index} className={`flex gap-2 p-4 px-6 hover:bg-gray-100 w-full text-gray-500 ${activeIndex==index?'bg-blue-50 text-primary':null}`} onClick={()=>setActiveIndex(index)}>
+            <Link key={index} className={`flex gap-2 p-4 px-6 hover:bg-gray-100 w-full text-gray-500 ${activeIndex==index?'bg-blue-50 text-primary':null}`} onClick={()=>setActiveIndex(index)} href={item.path}>
                 <item.icon/>
                 <h2>{item.name}</h2>
-            </button>
+            </Link>
         ))}
         </div>
     </div>
